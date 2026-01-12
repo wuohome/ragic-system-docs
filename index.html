@@ -1,15 +1,730 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant-TW">
 <head>
-  <meta charset="UTF-8" />
-  <title>Ragic 系統文件</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>租賃管理系統設計文件｜System Design Documentation</title>
+    <style>
+        :root {
+            /* 基礎色票 */
+            --primary-color: #2c3e50;
+            --accent-color: #2980b9;
+            --foundation-color: #d35400; /* 憲法級文件專用色 (權威感) */
+            --text-main: #333333;
+            --text-light: #666666;      /* 一般說明文字 */
+            --text-muted: #94a3b8;      /* 技術細節文字 (視覺降噪) */
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #e2e8f0;
+            --card-hover: #eef6fc;
+            
+            /* 功能性裝飾色 */
+            --highlight-bg: #e3f2fd;    /* 摘要背景 */
+            --guide-badge-bg: #f1f5f9;  /* 導覽標籤背景 */
+            --success-color: #27ae60;   /* 價值強調 */
+            --gate-bg: #fffbf7;         /* 00入口背景淡色 */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--bg-light);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* 佈局容器 */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* =========================================
+           1. Hero Section - 老闆的 30 秒戰場
+           ========================================= */
+        .hero {
+            background-color: var(--bg-white);
+            padding: 80px 0 60px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        /* 原有 Summary Box - 保留但微調 */
+        .summary-box {
+            background-color: var(--bg-light);
+            border-left: 5px solid var(--accent-color);
+            padding: 20px 30px;
+            display: inline-block;
+            text-align: left;
+            max-width: 800px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 25px;
+        }
+
+        .summary-box strong {
+            display: block;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary-box p {
+            font-size: 1.15rem;
+            color: var(--text-main);
+            font-weight: 500;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* NEW: 老闆專屬重點摘要 (Badge Style) */
+        .exec-summary-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .badge-pill {
+            background-color: var(--highlight-bg);
+            color: var(--accent-color);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid rgba(41, 128, 185, 0.2);
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .badge-pill::before {
+            content: '✓';
+            color: var(--success-color);
+            margin-right: 8px;
+            font-weight: 800;
+        }
+
+        /* =========================================
+           2. 可掃描閱讀區塊 (.read-block)
+           ========================================= */
+        .problem-solving {
+            padding: 60px 0;
+            background-color: var(--bg-white);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        .features-grid {
+            display: grid;
+            /* 修改：強制 2 欄位，確保 2x2 對齊 */
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        /* 優化：閱讀區塊容器 */
+        .read-block {
+            padding: 20px 20px 20px 25px;
+            border-left: 3px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .read-block:hover {
+            border-left-color: var(--accent-color);
+            background-color: #fafbfc;
+        }
+
+        .read-block h3 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .read-block p {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        /* =========================================
+           3. 技術降噪 (.tech-note)
+           ========================================= */
+        .core-concepts {
+            padding: 60px 0;
+            background-color: var(--bg-light);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .concept-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+            position: relative; /* For layout context */
+        }
+
+        .concept-main {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+
+        .concept-desc {
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        /* NEW: 技術細節視覺降權 */
+        .tech-note {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            background-color: var(--bg-light);
+            padding: 8px 12px;
+            border-radius: 4px;
+            width: 100%;
+            border-left: 2px solid #cbd5e1;
+            display: block;
+        }
+        
+        .tech-note::before {
+            content: 'Technical Context: ';
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        /* =========================================
+           4. 文件導覽地圖 (重構版)
+           Architecture Gate & Modules
+           ========================================= */
+        .doc-map {
+            padding: 60px 0;
+            background-color: var(--bg-white);
+        }
+
+        /* 00 - Architecture Gate (憲法級入口) */
+        .architecture-gate {
+            margin-bottom: 40px;
+            background-color: var(--gate-bg);
+            border: 1px solid #fed7aa; /* 橘色系邊框 */
+            border-left: 8px solid var(--foundation-color); /* 強調左側粗線 */
+            border-radius: 4px 8px 8px 4px;
+            box-shadow: 0 4px 15px rgba(211, 84, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .architecture-gate:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(211, 84, 0, 0.1);
+        }
+
+        .gate-link {
+            display: flex;
+            flex-direction: column;
+            padding: 35px 30px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .gate-header {
+            margin-bottom: 15px;
+        }
+
+        .gate-tag {
+            font-size: 0.85rem;
+            color: var(--foundation-color);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .gate-tag::before {
+            content: '🏛';
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
+
+        .gate-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .gate-desc {
+            color: var(--text-main);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            max-width: 800px;
+        }
+
+        .gate-directive {
+            display: inline-block;
+            background-color: #fff;
+            border: 1px solid #fed7aa;
+            color: #b45309; /* 深橘色文字 */
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .gate-directive::before {
+            content: '⚠️';
+            margin-right: 6px;
+        }
+
+        /* 連接線 (視覺引導) */
+        .system-flow-connector {
+            text-align: left;
+            padding-left: 40px;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .system-flow-connector::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: -20px;
+            bottom: 50%;
+            width: 2px;
+            background-color: var(--border-color);
+        }
+
+        .system-flow-connector::after {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            width: 15px;
+            height: 2px;
+            background-color: var(--border-color);
+        }
+
+        /* 子模組列表 (降權設計) */
+        .module-prd-list {
+            padding-left: 20px; /* 縮排，表示層級較低 */
+        }
+
+        .module-section-label {
+            margin-bottom: 20px;
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .doc-link {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            background-color: var(--bg-white);
+            height: 100%;
+            position: relative;
+        }
+
+        .doc-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            border-color: var(--accent-color);
+        }
+
+        .doc-header {
+            margin-bottom: 15px;
+        }
+
+        .doc-tag {
+            font-size: 0.75rem;
+            color: var(--text-muted); /* 降權：改用灰色 */
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .doc-title {
+            font-size: 1.2rem; /* 降權：標題變小 */
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .doc-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex-grow: 1; /* 推擠底部 */
+        }
+
+        /* 適用對象標籤 */
+        .audience-guide {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px dashed var(--border-color);
+            font-size: 0.8rem;
+            color: #95a5a6;
+            display: flex;
+            align-items: center;
+        }
+
+        .audience-guide::before {
+            content: '👀 適合：';
+            margin-right: 5px;
+            opacity: 0.7;
+        }
+
+        /* =========================================
+           5. 第一次閱讀提示 (Fixed UI)
+           ========================================= */
+        .first-time-hint {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 0.9rem;
+            z-index: 1000;
+            max-width: 250px;
+            animation: fadeIn 1s ease-out;
+            pointer-events: none; /* 不干擾點擊底層 */
+            opacity: 0.9;
+        }
+        
+        .first-time-hint strong {
+            color: #61dafb;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 0.9; transform: translateY(0); }
+        }
+
+        /* =========================================
+           Footer & Author
+           ========================================= */
+        footer {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 60px 0;
+            margin-top: 0;
+        }
+
+        .author-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .author-info h4 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .author-title {
+            color: #bdc3c7;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .author-specialty {
+            font-size: 0.9rem;
+            color: #ecf0f1;
+            background-color: rgba(255,255,255,0.1);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .doc-meta {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .exec-summary-badges { flex-direction: column; align-items: center; gap: 10px; }
+            .badge-pill { width: 100%; justify-content: center; }
+            .author-section { flex-direction: column; text-align: left; }
+            .doc-meta { text-align: left; }
+            .first-time-hint { display: none; } /* 手機版隱藏提示以免遮擋 */
+            .module-prd-list { padding-left: 0; } /* 手機版取消縮排 */
+            .system-flow-connector { padding-left: 0; }
+            .system-flow-connector::before, .system-flow-connector::after { display: none; }
+            /* 修改：手機版改為單欄，避免擁擠 */
+            .features-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-  <h1>Ragic 系統文件交付網站</h1>
-  <ul>
-    <li><a href="modules/01-overview.md">01 模組總覽</a></li>
-    <li><a href="modules/02-logic.md">02 撰寫邏輯</a></li>
-    <li><a href="modules/03-prd.md">03 PRD</a></li>
-  </ul>
+
+    <!-- 1. Hero Section -->
+    <section class="hero exec-summary">
+        <div class="container">
+            <h1>租賃管理系統設計文件</h1>
+            <div class="subtitle">System Design & PRD Documentation</div>
+            
+            <div class="summary-box">
+                <strong>核心價值總結</strong>
+                <p>這是一套用「內稽內控邏輯」打造的包租代管系統。它確保了在長時間跨度下，即使人員異動頻繁，所有的合約效期、金流對帳與修繕責任，依然能追溯到對應的負責人與時間點。</p>
+            </div>
+
+            <!-- 3行就懂 (老闆專用) -->
+            <div class="exec-summary-badges">
+                <span class="badge-pill">合約期間不會亂</span>
+                <span class="badge-pill">金流一定對得起合約</span>
+                <span class="badge-pill">出事一定找得到責任人</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. 實務痛點解決 (可掃描閱讀設計) -->
+    <section class="problem-solving">
+        <div class="container">
+            <h2 class="section-title">這套系統解決了什麼實務問題？</h2>
+            <div class="features-grid">
+                
+                <div class="read-block">
+                    <h3>合約期間不脫鉤</h3>
+                    <p>解決「合約過期但系統還在收租」的風險。系統強制所有業務行為（收租、叫修）都必須掛在有效的合約期間內，沒有合約就不能作業。</p>
+                </div>
+
+                <div class="read-block">
+                    <h3>金流帳務不糊塗</h3>
+                    <p>面對「房客直匯房東」或「代墊款」等複雜情境，系統清楚切分「應收應付」與「實際過帳」，確保報表能反映真實營運全貌，而非只有公司流水帳。</p>
+                </div>
+
+                <div class="read-block">
+                    <h3>維修責任不互推</h3>
+                    <p>每一張維修工單都綁定單一負責人，並將「維修事件」與「請款金流」分開記錄，避免工程與會計的職責混淆，清楚釐清是誰派的工、誰該付錢。</p>
+                </div>
+
+                <div class="read-block">
+                    <h3>人員交接不掉球</h3>
+                    <p>所有資料都是「歷史留痕」且「不可覆蓋」。新人接手時，能直接看到完整的歷史軌跡與決策脈絡，不需要依賴資深員工的口頭記憶。</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 設計核心概念 (技術與邏輯分層) -->
+    <section class="core-concepts tech-section">
+        <div class="container">
+            <h2 class="section-title">系統設計核心邏輯</h2>
+            
+            <div class="concept-card">
+                <div class="concept-main">核心：以「管理案件」驅動所有業務</div>
+                <div class="concept-desc">
+                    我們管理的不是靜態的「房子」，而是動態的「委託合約期間」。所有的租約、金流、維修，在資料庫中都必須強制關聯到一個具體的「管理案件」，確保資料的時效性與歸屬權。
+                </div>
+                <!-- 技術補充 (降噪) -->
+                <small class="tech-note">
+                    Management Case as Primary Key: 所有子模組皆以此為 Foreign Key 進行關聯，確保資料範圍被嚴格限制在委託期間內。
+                </small>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-main">狀態：物件是被動的結果</div>
+                <div class="concept-desc">
+                    房子的狀態（出租中 / 閒置）不是給人手動切換的開關，而是系統根據「今天是否有有效租約」自動推算出來的結果。這能徹底杜絕「人為忘記更新狀態」的常見管理疏失。
+                </div>
+                <!-- 技術補充 (降噪) -->
+                <small class="tech-note">
+                    Derived State / Single Source of Truth: 物件狀態由系統根據當下有效的案件與租約自動計算 (Computed) 而得。
+                </small>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 4. 文件閱讀地圖 (資訊架構重構版) -->
+    <section class="doc-map">
+        <div class="container">
+            <h2 class="section-title">文件閱讀導覽</h2>
+            
+            <!-- Level 0: System Foundation (憲法級入口) -->
+            <div class="system-foundation">
+                <div class="architecture-gate">
+                    <a href="prd/00_System_Overview.html" class="gate-link">
+                        <div class="gate-header">
+                            <span class="gate-tag">System Architecture / Foundation</span>
+                            <div class="gate-title">00. 系統架構總覽 (System Overview)</div>
+                        </div>
+                        <div class="gate-desc">
+                            【入口必讀】這是本系統的「憲法」。說明了管理案件的核心地位、資料流向的全貌，以及不可違背的系統設計原則。
+                        </div>
+                        <div class="gate-directive">
+                            ⚠️ 以下所有模組設計，皆以本頁定義的世界觀為準。請先理解此頁，再閱讀模組規格。
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Visual Flow Connector -->
+            <div class="system-flow-connector">
+                ↓ Based on System Overview
+            </div>
+
+            <!-- Level 1: Module Specifications (實作層) -->
+            <div class="module-prd-list">
+                <h3 class="module-section-label">模組規格 (Module PRDs)</h3>
+                
+                <div class="doc-grid">
+                    <!-- 01 租約 -->
+                    <a href="prd/01_Tenant_Lease.html" class="doc-link">
+                        <div class="doc-header">
+                            <span class="doc-tag">01. Module</span>
+                            <div class="doc-title">租約與房客模組</div>
+                        </div>
+                        <div class="doc-desc">
+                            定義「出租事實」。包含如何處理續約、換房客、以及「新增不覆蓋」的歷史紀錄原則。
+                        </div>
+                        <div class="audience-guide">PM / 租管人員 / 技術人員</div>
+                    </a>
+
+                    <!-- 02 金流 -->
+                    <a href="prd/02_Cashflow.html" class="doc-link">
+                        <div class="doc-header">
+                            <span class="doc-tag">02. Module</span>
+                            <div class="doc-title">金流帳務模組</div>
+                        </div>
+                        <div class="doc-desc">
+                            定義「經濟事實」。包含 AR/AP 與實際金流的雙維度設計，以及如何處理純紀錄與代墊款。
+                        </div>
+                        <div class="audience-guide">財務 / 系統設計 / 技術人員</div>
+                    </a>
+
+                    <!-- 03 維修 -->
+                    <a href="prd/03_Repair.html" class="doc-link">
+                        <div class="doc-header">
+                            <span class="doc-tag">03. Module</span>
+                            <div class="doc-title">維修管理模組</div>
+                        </div>
+                        <div class="doc-desc">
+                            定義「責任歸屬」。說明單一責任人制，以及如何將維修事件與金流請款進行職責分離。
+                        </div>
+                        <div class="audience-guide">工務 / PM / 技術人員</div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 5. 第一次閱讀提示 (Fixed) -->
+    <div class="first-time-hint">
+        💡 <strong>第一次閱讀建議：</strong><br>
+        請先點擊橘色外框的「系統架構總覽」，<br>它是理解後續模組的基礎。
+    </div>
+
+    <!-- Footer & Author -->
+    <footer>
+        <div class="container">
+            <div class="author-section">
+                <div class="author-info">
+                    <h4>張瓊安</h4>
+                    <span class="author-title">系統架構設計 / Ragic 資料庫設計與制度規劃</span>
+                    <span class="author-specialty">專長摘要：包租代管流程 × 內控制度 × 系統模組化設計</span>
+                </div>
+                <div class="doc-meta">
+                    <p>文件性質：系統設計與 PRD 文件</p>
+                    <p>適用對象：管理決策者、系統架構師、技術 PM</p>
+                    <p>最後更新：2026-01-13</p>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2026 Lease Management System Design Documentation. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
