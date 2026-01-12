@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Overview｜租賃管理系統架構總覽</title>
+    <title>System Design Consensus｜系統設計共識與架構說明</title>
     <style>
         :root {
-            /* 系統色票：專業、冷靜、低飽和度 */
+            /* 調整後的色票：更溫和、專業 */
             --primary-bg: #ffffff;
             --secondary-bg: #f8f9fa;
-            --text-main: #2c3e50;
-            --text-secondary: #596c7e;
-            --accent-color: #2980b9;
+            --text-main: #333333;
+            --text-secondary: #5f6368;
+            --accent-color: #2c3e50; /* 深藍：穩重 */
+            --highlight-color: #3498db; /* 亮藍：重點 */
+            --tech-bg: #fffbf0; /* 暖黃：技術區塊背景 */
+            --tech-border: #fae5b0;
             --border-color: #e2e8f0;
-            --code-bg: #f1f5f9;
-            --info-bg: #eef6fc; /* 新增：資訊區塊背景 */
-            --boundary-bg: #fffbf0; /* 新增：邊界說明背景 */
-            --boundary-border: #fceabb;
         }
 
         * {
@@ -39,7 +38,7 @@
             margin: 0 auto;
             background-color: var(--primary-bg);
             padding: 60px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             border-radius: 8px;
         }
 
@@ -47,59 +46,49 @@
         header {
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 30px;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: var(--text-main);
-            letter-spacing: -0.025em;
             margin-bottom: 10px;
         }
 
         .subtitle {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             color: var(--text-secondary);
             font-weight: 400;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
-        .meta-info {
-            font-family: monospace;
-            font-size: 0.9rem;
+        /* 管理價值摘要區塊 (給老闆看) */
+        .mgmt-summary {
+            background-color: #f0f7ff;
+            border-left: 5px solid var(--highlight-color);
+            padding: 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 20px;
+        }
+
+        .mgmt-summary h3 {
+            margin-top: 0;
             color: var(--accent-color);
-            background-color: var(--code-bg);
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
         }
 
-        /* 新增：文件定位區塊 */
-        .doc-positioning {
-            margin-top: 25px;
-            padding: 20px;
-            background-color: var(--info-bg);
-            border-left: 4px solid var(--accent-color);
-            border-radius: 0 4px 4px 0;
-            font-size: 0.95rem;
-            color: #34495e;
-        }
-        
-        .doc-positioning strong {
-            color: var(--accent-color);
-            display: block;
-            margin-bottom: 8px;
-            font-size: 1rem;
-        }
-
-        .doc-positioning ul {
+        .mgmt-summary ul {
             margin-bottom: 0;
             padding-left: 20px;
         }
 
-        .doc-positioning li {
-            margin-bottom: 4px;
+        .mgmt-summary li {
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
         }
 
         /* 通用排版 */
@@ -108,38 +97,24 @@
         }
 
         h2 {
-            font-size: 1.75rem;
-            border-left: 5px solid var(--accent-color);
-            padding-left: 15px;
+            font-size: 1.6rem;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
             margin-bottom: 30px;
-            color: var(--text-main);
         }
 
         h3 {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             margin-top: 30px;
             margin-bottom: 15px;
             color: var(--text-main);
+            font-weight: 600;
         }
 
         p {
             margin-bottom: 1.2em;
             color: #4a5568;
-        }
-
-        ul {
-            padding-left: 20px;
-            margin-bottom: 20px;
-        }
-
-        li {
-            margin-bottom: 8px;
-            color: #4a5568;
-        }
-
-        strong {
-            color: var(--text-main);
-            font-weight: 600;
         }
 
         /* 系統圖區塊 */
@@ -179,91 +154,63 @@
             padding: 25px;
             background: #fff;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            display: flex;
-            flex-direction: column;
         }
 
         .module-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
         }
 
         .module-card h4 {
-            color: var(--accent-color);
+            color: var(--highlight-color);
             font-size: 1.1rem;
             margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
             border-bottom: 1px dashed var(--border-color);
             padding-bottom: 10px;
         }
 
-        .module-card ul {
-            padding-left: 18px;
-            font-size: 0.95rem;
-            flex-grow: 1; /* 讓內容撐開，使 footer 對齊 */
+        /* 技術區塊專用樣式 */
+        .tech-section-wrapper {
+            background-color: var(--tech-bg);
+            border: 1px dashed var(--tech-border);
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 60px;
         }
 
-        /* 新增：責任邊界區塊 */
-        .boundary-block {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: var(--boundary-bg);
-            border: 1px dashed var(--boundary-border);
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-
-        .boundary-block h5 {
+        .tech-section-title {
             color: #d35400;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
+            font-size: 1.4rem;
             font-weight: 700;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
         }
+        
+        .tech-section-title::before {
+            content: '🛠️';
+            margin-right: 10px;
+        }
 
-        .boundary-block ul {
-            margin-bottom: 0;
+        .tech-rule {
+            margin-bottom: 20px;
             padding-left: 15px;
+            border-left: 3px solid #f39c12;
         }
 
-        .boundary-block li {
-            color: #7f8c8d;
-            margin-bottom: 4px;
-        }
-
-        /* 設計原則列表 */
-        dl.principles {
-            display: grid;
-            gap: 20px;
-        }
-
-        dt {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--text-main);
+        .tech-rule strong {
+            color: #d35400;
+            display: block;
             margin-bottom: 5px;
         }
 
-        dd {
-            margin-left: 0;
-            padding-left: 15px;
-            border-left: 3px solid var(--border-color);
-            color: var(--text-secondary);
-        }
-
-        /* 新增：PRD 架構角色區塊 */
-        .prd-role-section {
-            background-color: var(--secondary-bg);
-            padding: 30px;
-            border-radius: 8px;
-            border-left: 5px solid var(--text-secondary);
-        }
-        
-        .prd-role-section h3 {
-            margin-top: 0;
-            color: var(--text-main);
+        .tech-code {
+            font-family: monospace;
+            background-color: rgba(255,255,255,0.6);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #555;
+            font-size: 0.9em;
         }
 
         /* 作者簽名區塊 */
@@ -303,202 +250,136 @@
             font-size: 0.85rem;
             color: var(--text-secondary);
         }
-
-        /* RWD 微調 */
-        @media (max-width: 768px) {
-            .container {
-                padding: 30px 20px;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-            .module-grid {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
 
     <div class="container">
         
-        <!-- 1️⃣ 頁首 -->
+        <!-- 1️⃣ 頁首：商業價值與共識 -->
         <header>
-            <h1>System Overview｜租賃管理系統架構總覽</h1>
-            <div class="subtitle">Ragic Database Design & Architecture Notes</div>
-            <div class="meta-info">文件版本：1.1 | 最後更新：2026-01-13 | 狀態：Approved</div>
+            <h1>System Design Consensus｜系統設計共識</h1>
+            <div class="subtitle">System Architecture & Management Logic</div>
             
-            <!-- 新增：文件定位說明 -->
-            <div class="doc-positioning">
-                <strong>📌 文件定位與閱讀須知</strong>
+            <!-- 管理價值摘要：給老闆看 -->
+            <div class="mgmt-summary">
+                <h3>📌 為什麼需要這套系統？（管理目標）</h3>
+                <p>這份文件是我們對於「公司如何長久運作」的制度共識。不同於單純的 Excel 記錄，這套系統是為了降低以下管理風險而設計：</p>
                 <ul>
-                    <li style="color: #d35400; font-weight: 600;">一句話總結：這套系統的目的，是讓「合約、錢、責任」永遠對得起來，就算人換了、時間過了，帳也不會亂。</li>
-                    <li><strong>文件類型：</strong>System Architecture / PRD Overview（系統架構總覽）</li>
-                    <li><strong>適用對象：</strong>系統架構師、資料庫設計人員、技術型 PM、系統交接人員</li>
-                    <li><strong>閱讀範圍：</strong>本文件專注於「設計哲學」、「資料流向」與「模組邊界」。</li>
-                    <li><strong>注意：</strong>本文件<u>不包含</u>終端使用者的操作手冊 (SOP)，亦<u>不定義</u>詳細的 API 規格與欄位屬性。</li>
+                    <li><strong>降低人員依賴風險：</strong>即使資深同仁離職，合約與帳務的歷史軌跡依然完整保留，新人能快速接手。</li>
+                    <li><strong>確保權責帳務分明：</strong>每一筆錢、每一個維修事件，系統都強制要求「對應到合約」與「指定負責人」，避免模糊空間。</li>
+                    <li><strong>自動化防呆機制：</strong>透過系統邏輯，避免人為忘記更改狀態（如：合約到期忘記改閒置）造成的資訊落差。</li>
                 </ul>
             </div>
         </header>
 
         <!-- 2️⃣ 系統全覽圖 -->
         <section id="diagram">
-            <h2>系統全覽圖 (Architecture Overview)</h2>
+            <h2>系統運作全覽圖</h2>
             <div class="diagram-wrapper">
                 <img src="../diagrams/export/00_System_Overview.drawio.svg" alt="系統全覽架構圖：物件 → 管理案件 → 子模組">
-                <span class="caption">圖 1：此圖說明『物件 → 管理案件 → 三大子模組』的生命週期與資料流向。</span>
+                <span class="caption">圖 1：系統運作邏輯：一切業務皆圍繞著「管理案件（合約）」進行。</span>
             </div>
         </section>
 
-        <!-- 3️⃣ 核心概念 -->
+        <!-- 3️⃣ 核心管理邏輯 (白話文) -->
         <section id="core-concepts">
-            <h2>核心設計概念</h2>
+            <h2>核心管理邏輯 (Management Logic)</h2>
             <article>
-                <h3>為何「管理案件 (Management Case)」是驅動核心？</h3>
+                <h3>1. 以「案件 (Case)」為核心，而不是「房子」</h3>
                 <p>
-                    在包租代管的商業邏輯中，我們管理的不是「房子」，而是一份「有效的委託合約」。
-                    <strong>管理案件</strong>就是這份合約的時間容器，它定義了權利義務的開始與結束。
-                </p>
-                <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                    <em>技術定義：Management Case 是系統的主鍵容器 (Primary Container)，所有子模組皆以此為 Foreign Key 進行關聯，確保資料範圍被嚴格限制在委託期間內。</em>
+                    在實務管理上，我們重視的是<strong>「一段有效期間內的委託關係」</strong>。房子本身是靜態的資產，但「管理案件」代表了我們與屋主的合約起訖。
+                    <br>👉 <strong>設計目的：</strong> 所有的收租、修繕，必須掛在一個「有效的案件」下，這樣才能確保我們收的錢、付的款，都是在合約期間內發生的合法業務。
                 </p>
 
-                <h3>為何「物件 (Building)」是被動狀態？</h3>
+                <h3>2. 狀態由系統判斷，減少人為疏失</h3>
                 <p>
-                    物件只是「資產清單」，它的狀態（如：出租中、閒置）應該是「結果」，而不是讓人手動去改的「開關」。
-                    這樣可以避免「合約已經結束，但系統還顯示出租中」的人為疏失風險。
-                </p>
-                <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                    <em>技術定義：物件狀態採用 Derived State (衍生狀態) 設計，由系統根據當下有效的案件與租約自動計算 (Computed) 而得，確保 Single Source of Truth。</em>
+                    房子的狀態（出租中 / 閒置 / 裝潢中）不應該靠同仁手動去切換。人會忙、會忘記。
+                    <br>👉 <strong>設計目的：</strong> 系統會檢查「今天是否在租約期間內」來自動判斷狀態。這樣老闆看報表時，看到的永遠是系統運算出的真實狀況，而不是同仁上次記得更新的狀況。
                 </p>
 
-                <h3>資料歸屬原則：一切皆歸於案件</h3>
+                <h3>3. 資料歸屬明確，避免帳務孤兒</h3>
                 <p>
-                    所有的收支、租約、維修紀錄，都必須掛在一個具體的「案件」底下。
-                    這就像是把所有單據都釘在該年度的卷宗裡，未來如果要結算損益或交接，只要調出該案件，所有關聯資料都會一次帶出，不會遺漏。
-                </p>
-                <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                    <em>技術定義：透過強制關聯 (Mandatory Relationship) 確保資料完整性 (Referential Integrity)，避免產生無主的孤兒資料 (Orphan Records)。</em>
+                    任何一筆金流單據或維修工單，都必須明確歸屬於某一個案件。
+                    <br>👉 <strong>設計目的：</strong> 這是為了未來的「結算」與「查帳」。當我們調閱某個案件時，系統能一次帶出所有相關聯的收入與支出，不會有「不知道這筆錢是哪邊來的」的孤兒帳。
                 </p>
             </article>
         </section>
 
-        <!-- 4️⃣ 子模組定位 -->
+        <!-- 4️⃣ 模組分工與風險控管 -->
         <section id="modules">
-            <h2>三大子模組定位</h2>
+            <h2>各模組的風險控管目標</h2>
             <div class="module-grid">
                 
                 <!-- 01 租約 -->
                 <article class="module-card">
                     <h4>01｜租約與房客模組</h4>
-                    <p><strong>定位：</strong>出租事實的單一真相來源。</p>
+                    <p><strong>管理目標：</strong>確保「出租事實」的絕對正確。</p>
                     <ul>
-                        <li><strong>解決問題：</strong>釐清「誰、何時、租了哪裡」，這是計算營收的基礎依據。</li>
-                        <li><strong>核心原則：</strong>採用「新增不覆蓋」策略。就像銀行存摺一樣，換房客時是「新增一筆」，而不是塗改舊資料，這樣才能保留完整的歷史軌跡。</li>
-                        <li><strong>關係：</strong>一個人可以租很多次，系統會透過房客 ID 把這些紀錄串起來。</li>
+                        <li><strong>解決問題：</strong>清楚記錄誰、在什麼時候、租了哪裡。</li>
+                        <li><strong>風險控管：</strong>換房客時，系統強制「新增一筆租約」而非修改舊資料。這樣我們才能隨時回頭查閱去年的房客是誰，保留完整的歷史履歷。</li>
                     </ul>
-                    
-                    <!-- 新增：責任邊界 -->
-                    <div class="boundary-block">
-                        <h5>⚙️ 責任邊界與不處理事項</h5>
-                        <ul>
-                            <li><strong>負責：</strong>租約的生命週期與法律關係定義。</li>
-                            <li><strong>決策理由 (不處理收付)：</strong>本模組只管「合約內容」，不管「有沒有收到錢」。這樣設計是為了避免業務為了沖帳而去修改合約日期，造成法律文件與帳務混亂。</li>
-                        </ul>
-                    </div>
                 </article>
 
                 <!-- 02 金流 -->
                 <article class="module-card">
                     <h4>02｜金流模組</h4>
-                    <p><strong>定位：</strong>所有經濟活動的歷史帳本。</p>
+                    <p><strong>管理目標：</strong>真實反映營運全貌，不只是流水帳。</p>
                     <ul>
-                        <li><strong>雙維度設計：</strong>區分「權利義務 (AR/AP)」與「資金流向 (Flow Mode)」。即使錢不進公司帳戶，我們也要記錄這筆權利義務，才能產出正確的房東報表。</li>
-                        <li><strong>純紀錄機制：</strong>承認「房客直匯房東」的現實情境，確保系統能反映真實營運全貌，而不是只記錄公司經手的錢。</li>
-                        <li><strong>不可逆性：</strong>金流紀錄一旦建立就鎖定。寫錯了請用「沖銷（負數）」修正，這能保留稽核軌跡，防止舞弊。</li>
+                        <li><strong>解決問題：</strong>處理「房客直接匯款給房東」這種不經公司手，但需要紀錄的情境。</li>
+                        <li><strong>風險控管：</strong>區分「應收應付」與「實際金流」。即使錢沒進公司帳戶，我們也能產出正確的報表給房東看，避免帳務爭議。</li>
                     </ul>
-
-                    <!-- 新增：責任邊界 -->
-                    <div class="boundary-block">
-                        <h5>⚙️ 責任邊界與不處理事項</h5>
-                        <ul>
-                            <li><strong>負責：</strong>所有經濟事實的流水帳與損益歸屬。</li>
-                            <li><strong>決策理由 (不處理維修細節)：</strong>會計不需要知道「馬桶修了什麼零件」，只需要知道「修繕費多少錢」。將執行細節剝離，能讓帳務更單純、結算更快速。</li>
-                        </ul>
-                    </div>
                 </article>
 
                 <!-- 03 維修 -->
                 <article class="module-card">
                     <h4>03｜維修模組</h4>
-                    <p><strong>定位：</strong>事件責任歸屬與執行紀錄。</p>
+                    <p><strong>管理目標：</strong>責任歸屬清楚，避免推諉。</p>
                     <ul>
-                        <li><strong>金流分離：</strong>本模組只管「修了什麼、誰修的」。涉及廠商請款時，會另外拋轉一筆資料到金流模組，確保工務與會計的職責分開。</li>
-                        <li><strong>單一責任人：</strong>每張工單只有一個主要負責人。這不是系統限制，而是管理要求：一定要有人對這件事負全責，避免多頭馬車互推責任。</li>
-                        <li><strong>協助者：</strong>「協助人員」僅作文字備註，不計入複雜績效，避免為了少數情境把系統搞得太複雜難用。</li>
+                        <li><strong>解決問題：</strong>將「維修事件」與「金流請款」分開處理。工務專注解決問題，會計專注處理款項。</li>
+                        <li><strong>風險控管：</strong>每張工單強制指定「單一負責人」。避免多頭馬車，出問題時能立刻找到對應的窗口。</li>
                     </ul>
-
-                    <!-- 新增：責任邊界 -->
-                    <div class="boundary-block">
-                        <h5>⚙️ 責任邊界與不處理事項</h5>
-                        <ul>
-                            <li><strong>負責：</strong>事件進度追蹤與責任人歸屬。</li>
-                            <li><strong>決策理由 (不處理績效計算)：</strong>系統專注於「把事情做完」。複雜的績效獎金計算（如：介紹費、點工費）應由另外的報表系統處理，以免頻繁變動的獎金制度拖累日常維修作業。</li>
-                        </ul>
-                    </div>
                 </article>
             </div>
         </section>
 
-        <!-- 5️⃣ 設計原則 -->
-        <section id="principles">
-            <h2>系統設計原則 (Design Principles)</h2>
-            <dl class="principles">
-                <dt>單一事實來源 (Single Source of Truth)</dt>
-                <dd>
-                    資料不重複、不打架。例如租金金額，只在租約裡定義一次，其他地方要用就「參照」過來，避免發生「租約改了，但帳單沒改到」的災難。
-                    <br><em style="color:var(--text-secondary); font-size:0.9rem;">(Technical: Data Normalization / Reference Integrity)</em>
-                </dd>
+        <!-- 5️⃣ 技術實作規範 (給 RD 看的) -->
+        <div class="tech-section-wrapper">
+            <div class="tech-section-title">以下為系統實作規範與資料庫限制（技術人員參考）</div>
+            <p style="color: #666; margin-bottom: 20px;">為了支撐上述的管理目標，系統在資料庫層級採用了以下設計規範，請在開發與維護時予以遵守。</p>
 
-                <dt>歷史資料不可覆寫 (Immutability)</dt>
-                <dd>
-                    凡走過必留下痕跡。合約過期、金流寫錯，都應該保留原始紀錄，而不是直接覆蓋或刪除。這是為了日後查帳與法律舉證的必要手段。
-                    <br><em style="color:var(--text-secondary); font-size:0.9rem;">(Technical: Append-only Log / Audit Trail)</em>
-                </dd>
+            <div class="tech-rule">
+                <strong>1. 單一事實來源 (Single Source of Truth)</strong>
+                <p>資料正規化原則。例如租金金額僅在租約模組定義，其他模組應透過 <span class="tech-code">Link & Load</span> 引用，嚴禁重複建立欄位，以避免資料不同步的風險。</p>
+            </div>
 
-                <dt>狀態由資料推導 (Derived State)</dt>
-                <dd>
-                    減少人為操作。例如「出租中」這個狀態，應該是系統自己去判斷「今天是不是在租期內」，而不是靠人工記得去切換開關。
-                    <br><em style="color:var(--text-secondary); font-size:0.9rem;">(Technical: Computed Fields / State Machine)</em>
-                </dd>
+            <div class="tech-rule">
+                <strong>2. 歷史資料不可覆寫 (Immutability)</strong>
+                <p>為了滿足稽核需求，核心業務資料（合約、金流）一旦建立應視為不可變。若有錯誤，應透過「沖銷（新增負數單）」或「版本更迭」處理，避免使用 <span class="tech-code">UPDATE</span> 修改歷史欄位。</p>
+            </div>
 
-                <dt>模組分工清楚 (Separation of Concerns)</dt>
-                <dd>
-                    各司其職。維修不管錢、金流不管修，這樣在未來擴充功能或更換人員時，才不會牽一髮動全身，降低系統維護的風險。
-                    <br><em style="color:var(--text-secondary); font-size:0.9rem;">(Technical: Modular Architecture / Decoupling)</em>
-                </dd>
+            <div class="tech-rule">
+                <strong>3. 狀態由資料推導 (Derived State)</strong>
+                <p>物件狀態應為 Computed Field。邏輯範例：<span class="tech-code">IF(TODAY() >= Lease_Start AND TODAY() <= Lease_End, "Occupied", "Vacant")</span>。避免設計人工切換的狀態欄位。</p>
+            </div>
 
-                <dt>預留空間，但不過度設計 (YAGNI)</dt>
-                <dd>
-                    實用優先。例如維修協助者目前只用文字記錄，不把系統做得太複雜，保留未來升級彈性，但不在初期就增加不必要的維護成本。
-                    <br><em style="color:var(--text-secondary); font-size:0.9rem;">(Technical: You Aren't Gonna Need It)</em>
-                </dd>
-            </dl>
-        </section>
+            <div class="tech-rule">
+                <strong>4. 模組低耦合 (Decoupling)</strong>
+                <p>維修模組不直接操作金流表單，而是透過參照關聯。保持模組邊界清晰，有助於未來系統功能的獨立擴充與維護。</p>
+            </div>
+        </div>
 
-        <!-- 新增：PRD 架構角色說明 -->
-        <section id="prd-structure" class="prd-role-section">
-            <h3>📌 本文件在整體 PRD 架構中的角色</h3>
+        <!-- PRD 架構說明 -->
+        <section id="prd-structure" style="margin-top: 60px;">
+            <h3>📌 文件閱讀指引</h3>
             <p>
-                本頁面 (00_System_Overview) 是進入系統設計森林前的「地圖」。在深入閱讀後續詳細規格前，請務必先理解此處定義的架構邏輯。
+                本頁面 (System Design Consensus) 是進入系統設計森林前的地圖。建議依照以下順序閱讀後續文件，以了解細節規格：
             </p>
-            <div style="margin-top: 15px;">
-                <strong>💡 建議閱讀順序：</strong>
-                <ol style="padding-left: 20px; margin-top: 10px;">
-                    <li><strong>Step 1：</strong>閱讀本頁，理解「管理案件」的核心地位與三大模組的分工邊界。</li>
-                    <li><strong>Step 2：</strong>閱讀 <strong>01_租約與房客模組 PRD</strong>，理解基礎資料如何建立。</li>
-                    <li><strong>Step 3：</strong>閱讀 <strong>02_金流模組 PRD</strong>，理解帳務如何依附於租約與案件。</li>
-                    <li><strong>Step 4：</strong>閱讀 <strong>03_維修模組 PRD</strong>，理解事件如何獨立於金流之外運作。</li>
+            <div style="margin-top: 15px; padding-left: 20px;">
+                <ol>
+                    <li><strong>01_租約與房客模組：</strong>理解基礎資料（人與合約）如何建立。</li>
+                    <li><strong>02_金流模組：</strong>理解帳務如何依附於租約與案件。</li>
+                    <li><strong>03_維修模組：</strong>理解維修事件如何獨立於金流運作。</li>
                 </ol>
             </div>
         </section>
@@ -512,11 +393,11 @@
             </div>
         </div>
 
-        <!-- 6️⃣ 頁尾說明 -->
+        <!-- 頁尾說明 -->
         <footer>
             <p><strong>文件定位說明：</strong></p>
-            <p>本文件為「系統設計與架構說明」，非操作手冊或教學文件。</p>
-            <p>實際欄位定義、API 規格與操作流程，請參考各模組詳細 PRD 頁面。</p>
+            <p>本文件為「系統設計與架構說明」，旨在建立管理共識與技術規範。</p>
+            <p>實際操作流程與 API 規格，請參考各模組詳細 PRD 文件。</p>
             <p style="margin-top: 15px; color: #cbd5e0;">&copy; System Architecture Documentation</p>
         </footer>
 
