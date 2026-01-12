@@ -1,0 +1,123 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.3.0">
+  <diagram name="第 1 页" id="afa0taUqHCreGqT_e_4B">
+    <mxGraphModel dx="1426" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="entity_case" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;" value="管理案件 (Management Case)&#xa;【維修歸屬容器】" vertex="1">
+          <mxGeometry height="110" width="240" x="80" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="field_case_id" parent="entity_case" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="🔑 案件編號 (Key)" vertex="1">
+          <mxGeometry height="26" width="240" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="field_case_name" parent="entity_case" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="🏠 物件名稱 / 地址" vertex="1">
+          <mxGeometry height="26" width="240" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="field_case_link" parent="entity_case" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=2;fontColor=#666666;" value="🔗 關聯維修紀錄 (列表)" vertex="1">
+          <mxGeometry height="26" width="240" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="entity_repair" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#000000;" value="維修紀錄 (Repair Record)&#xa;【核心事件主表】" vertex="1">
+          <mxGeometry height="340" width="280" x="480" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="field_repair_id" parent="entity_repair" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="🔑 維修單號 (Key)" vertex="1">
+          <mxGeometry height="26" width="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="field_repair_case_link" parent="entity_repair" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=1;fontColor=#0000CC" value="🔗 關聯：管理案件 ID (必填)" vertex="1">
+          <mxGeometry height="26" width="280" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="field_repair_type" parent="entity_repair" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="📂 維修類型 (Selection)&#xa;[漏水/水電/家具/其他...]" vertex="1">
+          <mxGeometry height="40" width="280" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="field_repair_desc" parent="entity_repair" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="📝 問題描述" vertex="1">
+          <mxGeometry height="26" width="280" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="field_repair_helpers" parent="entity_repair" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#e1d5e7;fontColor=#555555;" value="👥 協助人員 / 備註說明 (Text)&#xa;[紀錄協作同仁/支援師傅]" vertex="1">
+          <mxGeometry height="40" width="280" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="field_repair_date" parent="entity_repair" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="📅 維修日期" vertex="1">
+          <mxGeometry height="26" width="280" y="188" as="geometry" />
+        </mxCell>
+        <mxCell id="field_repair_status" parent="entity_repair" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="⚡ 維修狀態 (Selection)&#xa;[申請/處理中/已完成/轉外包]" vertex="1">
+          <mxGeometry height="40" width="280" y="214" as="geometry" />
+        </mxCell>
+        <mxCell id="field_repair_settle" parent="entity_repair" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" value="⚖️ 是否影響房東結算 (Yes/No)" vertex="1">
+          <mxGeometry height="26" width="280" y="254" as="geometry" />
+        </mxCell>
+        <mxCell id="field_repair_advance" parent="entity_repair" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" value="💰 是否公司代墊 (Yes/No)" vertex="1">
+          <mxGeometry height="26" width="280" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="field_repair_nomoney" parent="entity_repair" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=1;fontColor=#B85450;" value="⚠️ 無金額欄位 (請去模組02)" vertex="1">
+          <mxGeometry height="26" width="280" y="306" as="geometry" />
+        </mxCell>
+        <mxCell id="entity_executor" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#000000;" value="維修執行者 (Repair Executor)&#xa;【角色來源統一抽象】" vertex="1">
+          <mxGeometry height="150" width="240" x="880" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="field_exec_id" parent="entity_executor" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="🔑 執行者 ID (Key)" vertex="1">
+          <mxGeometry height="26" width="240" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="field_exec_type" parent="entity_executor" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="👤 執行者類型 (Selection)&#xa;[員工/廠商/裝潢/對接窗口]" vertex="1">
+          <mxGeometry height="40" width="240" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="field_exec_name" parent="entity_executor" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="📛 執行者名稱 (顯示用)" vertex="1">
+          <mxGeometry height="26" width="240" y="96" as="geometry" />
+        </mxCell>
+        <mxCell id="field_exec_link" parent="entity_executor" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=2;fontColor=#666666;" value="🔗 關聯員工ID / 廠商ID" vertex="1">
+          <mxGeometry height="26" width="240" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_case_repair" edge="1" parent="1" source="entity_case" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeWidth=2;" target="entity_repair" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label_1_case" connectable="0" parent="rel_case_repair" style="resizable=0;html=1;whiteSpace=wrap;align=right;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.8" as="geometry">
+            <mxPoint x="10" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label_n_repair" connectable="0" parent="rel_case_repair" style="resizable=0;html=1;whiteSpace=wrap;align=left;verticalAlign=bottom;" value="N (多筆維修)" vertex="1">
+          <mxGeometry relative="1" x="0.8" as="geometry">
+            <mxPoint x="-10" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_repair_exec" edge="1" parent="1" source="entity_repair" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeWidth=2;" target="entity_executor" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label_n_repair_e" connectable="0" parent="rel_repair_exec" style="resizable=0;html=1;whiteSpace=wrap;align=right;verticalAlign=bottom;" value="N (負責案件)" vertex="1">
+          <mxGeometry relative="1" x="-0.8" as="geometry">
+            <mxPoint x="10" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label_1_exec" connectable="0" parent="rel_repair_exec" style="resizable=0;html=1;whiteSpace=wrap;align=left;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.8" as="geometry">
+            <mxPoint x="-10" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note_single_responsibility" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#ffff88;strokeColor=#9E916F;size=15;align=left;spacingLeft=5;fontSize=12;" value="💡 設計原則：單一責任人&#xa;系統刻意簡化，每張單只追蹤「一位主要執行者」做為責任歸屬。&#xa;多人協作（如：主管陪同、師傅帶學徒）請寫在「協助人員」欄位。&#xa;避免過度設計成多對多表格，保留未來彈性。" vertex="1">
+          <mxGeometry height="90" width="240" x="880" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_note_single" edge="1" parent="1" source="note_single_responsibility" style="endArrow=none;dashed=1;html=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#9E916F;" target="entity_repair" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="note_finance" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;size=15;align=left;spacingLeft=5;fontSize=12;fontStyle=1" value="⛔ 系統邊界：金流分離&#xa;本模組只管「修了什麼、誰修的」。&#xa;若涉及費用支付、廠商請款、向房東扣款，&#xa;請務必在「02 金流模組」建立對應的 Cash Flow。" vertex="1">
+          <mxGeometry height="80" width="280" x="480" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_note_fin" edge="1" parent="1" source="note_finance" style="endArrow=none;dashed=1;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="entity_repair" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="note_outsource" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fff2cc;strokeColor=#d6b656;size=15;align=left;spacingLeft=5;fontSize=12;" value="🔄 外包原則：&#xa;若遇高風險工程 (如防水/結構)，&#xa;狀態請標示為「已轉外包」，&#xa;並將執行者連結至外部廠商 ID。" vertex="1">
+          <mxGeometry height="70" width="240" x="880" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_note_out" edge="1" parent="1" source="note_outsource" style="endArrow=none;dashed=1;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="entity_executor" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="note_record" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#d5e8d4;strokeColor=#82b366;size=15;align=left;spacingLeft=5;fontSize=12;" value="📝 完整紀錄原則：&#xa;即使維修不經公司帳 (如房東自找人)，&#xa;仍需建立維修紀錄，供後續責任釐清，&#xa;此時「是否公司代墊」設為 No 即可。" vertex="1">
+          <mxGeometry height="70" width="260" x="160" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_note_rec" edge="1" parent="1" source="note_record" style="endArrow=none;dashed=1;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="entity_repair" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="note_future_expansion" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fff2cc;strokeColor=#d6b656;size=15;align=left;spacingLeft=5;fontSize=12;" value="🚀 未來擴充備註 (Future Roadmap)：&#xa;若未來需精確統計「支援次數 / 工時」或「內部貢獻」，&#xa;可另行設計 [Repair_Assist_Log] (協助紀錄表)。&#xa;👉 定位：僅作「分析/紀錄」用途。&#xa;⚠️ 原則：不影響本表的單一責任歸屬、金流與績效計算。" vertex="1">
+          <mxGeometry height="90" width="260" x="160" y="140" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

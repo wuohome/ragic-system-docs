@@ -1,0 +1,169 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.3.0">
+  <diagram name="第 1 页" id="g6QNUp1dBwx8c3IInweK">
+    <mxGraphModel dx="1426" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="group_building" parent="1" style="group;dashed=1;strokeColor=#999999;fillColor=none;verticalAlign=top;align=left;fontStyle=1;fontSize=14;" value="資料表：物件 (Building) - 狀態僅為顯示/統計用" vertex="1">
+          <mxGeometry height="150" width="1080" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_b_new" parent="group_building" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;arcSize=20;strokeWidth=2;" value="物件狀態：&#xa;新開發 / 閒置" vertex="1">
+          <mxGeometry height="60" width="120" x="40" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="node_b_managed" parent="group_building" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#82b366;fontColor=#333333;arcSize=20;fontStyle=0;dashed=1;strokeWidth=2;" value="物件狀態：&#xa;委託管理中&#xa;(公式衍生狀態)" vertex="1">
+          <mxGeometry height="60" width="120" x="540" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="node_b_released" parent="group_building" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#b85450;fontColor=#333333;arcSize=20;dashed=1;strokeWidth=2;" value="物件狀態：&#xa;暫停招租 / 停止管理&#xa;(公式衍生狀態)" vertex="1">
+          <mxGeometry height="60" width="140" x="920" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="guide_start_label" parent="group_building" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#60a917;strokeColor=#2D7600;fontColor=#ffffff;fontStyle=1;fontSize=13;arcSize=50;shadow=1;" value="🚀 流程起點" vertex="1">
+          <mxGeometry height="30" width="100" x="180" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="guide_start_arrow" edge="1" parent="group_building" source="guide_start_label" style="endArrow=classic;html=1;strokeColor=#60a917;strokeWidth=3;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="node_b_new" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="60" as="sourcePoint" />
+            <mxPoint x="60" y="10" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="group_case" parent="1" style="group;dashed=1;strokeColor=#0066CC;fillColor=none;verticalAlign=top;align=left;fontStyle=1;fontSize=14;" value="資料表：管理案件 (Management Case) - 核心驅動表單" vertex="1">
+          <mxGeometry height="340" width="1080" x="40" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_sign" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#333333;" value="是否同意&#xa;委託管理？" vertex="1">
+          <mxGeometry height="80" width="120" x="100" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="act_create" parent="1" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="新增「管理案件」&#xa;(產生委託編號)" vertex="1">
+          <mxGeometry height="60" width="140" x="280" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="state_case_pending" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;" value="案件狀態：&#xa;合約待生效" vertex="1">
+          <mxGeometry height="60" width="120" x="290" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_date" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="日期 &gt;= &#xa;委託起始日？" vertex="1">
+          <mxGeometry height="80" width="120" x="460" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="state_case_active" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;arcSize=20;" value="案件狀態：&#xa;委託執行中" vertex="1">
+          <mxGeometry height="60" width="120" x="640" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_end" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="管理服務結束？&#xa;(到期 OR 解約)" vertex="1">
+          <mxGeometry height="80" width="120" x="800" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_renew" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="房東是否續約？" vertex="1">
+          <mxGeometry height="80" width="120" x="800" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="state_case_closed" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;arcSize=20;" value="案件狀態：&#xa;已結案 / 無效" vertex="1">
+          <mxGeometry height="60" width="120" x="980" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="note_reason" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#ffff88;strokeColor=#9E916F;size=15;align=left;spacingLeft=5;fontSize=11;" value="💡 資料欄位設計：&#xa;結案時需選擇「原因」&#xa;1. 合約自然到期&#xa;2. 房東提前解約&#xa;3. 公司終止服務" vertex="1">
+          <mxGeometry height="70" width="150" x="785" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_note_connect" edge="1" parent="1" source="dec_end" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" target="note_reason" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_1" edge="1" parent="1" source="node_b_new" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dec_sign" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_2" edge="1" parent="1" source="dec_sign" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="act_create" value="同意">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_2b" edge="1" parent="1" source="dec_sign" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" target="node_b_new" value="不同意">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="160" y="200" />
+              <mxPoint x="100" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_3" edge="1" parent="1" source="act_create" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="state_case_pending" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_4" edge="1" parent="1" source="state_case_pending" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dec_date" value="每日系統檢查">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_5" edge="1" parent="1" source="dec_date" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="state_case_active" value="是 (生效)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_5b" edge="1" parent="1" source="dec_date" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="state_case_pending" value="否">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="520" y="340" />
+              <mxPoint x="350" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_sync_1" edge="1" parent="1" source="state_case_active" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#82b366;fontColor=#666666;" target="node_b_managed" value="公式/連動更新">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="160" />
+              <mxPoint x="600" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_6" edge="1" parent="1" source="state_case_active" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dec_end" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_7" edge="1" parent="1" source="dec_end" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dec_renew" value="是">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_8" edge="1" parent="1" source="dec_renew" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="act_create" value="是 (建立新年度案件)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="860" y="220" />
+              <mxPoint x="350" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_9" edge="1" parent="1" source="dec_renew" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="state_case_closed" value="否">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_sync_2" edge="1" parent="1" source="state_case_closed" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#b85450;fontColor=#666666;" target="node_b_released" value="公式/連動釋出">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_return" edge="1" parent="1" source="node_b_released" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="node_b_new" value="重新招商">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1100" y="80" />
+              <mxPoint x="1100" y="20" />
+              <mxPoint x="100" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="anno_sign" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#D68727;fontSize=11;fontStyle=1" value="👉 若同意，系統會建立一筆&#xa;「正式管理案件」資料" vertex="1">
+          <mxGeometry height="40" width="150" x="115" y="225" as="geometry" />
+        </mxCell>
+        <mxCell id="anno_date" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#D68727;fontSize=11;fontStyle=1" value="👉 系統每日自動檢查，&#xa;時間到了才正式算在管" vertex="1">
+          <mxGeometry height="40" width="150" x="510" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="anno_renew" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#D68727;fontSize=11;fontStyle=1" value="👉 若續約，系統會複製舊資料&#xa;自動產生新一期的管理案件" vertex="1">
+          <mxGeometry height="40" width="160" x="840" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_group" parent="1" style="group;rounded=1;strokeColor=#cccccc;fillColor=#f9f9f9;verticalAlign=top;align=left;fontStyle=1;fontSize=12;" value="📖 流程圖閱讀說明 (Legend)" vertex="1">
+          <mxGeometry height="100" width="1080" x="40" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_guide_text" parent="legend_group" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#333333;fontSize=12;fontStyle=1" value="👀 閱讀指引：請從左上角綠色「流程起點」開始，由左向右閱讀。" vertex="1">
+          <mxGeometry height="25" width="500" x="220" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_icon_diamond" parent="legend_group" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="" vertex="1">
+          <mxGeometry height="30" width="40" x="30" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_text_diamond" parent="legend_group" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" value="【需要做判斷或檢查】&#xa;代表此處需要人工確認，或系統正在檢查條件（如日期是否到了）" vertex="1">
+          <mxGeometry height="30" width="280" x="80" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_icon_rect" parent="legend_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="狀態" vertex="1">
+          <mxGeometry height="30" width="60" x="380" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_text_rect" parent="legend_group" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" value="【資料目前的狀態】&#xa;代表案件或房子目前處於哪個階段（如：管理中、已結案）" vertex="1">
+          <mxGeometry height="30" width="280" x="450" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_icon_dashed" parent="legend_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;dashed=1;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="30" width="60" x="750" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_text_dashed" parent="legend_group" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" value="【系統自動推算】&#xa;虛線框或虛線箭頭，代表這是系統自動連動的結果，不需要人去操作" vertex="1">
+          <mxGeometry height="30" width="250" x="820" y="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,77 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.3.0">
+  <diagram name="第 1 页" id="10okwt7YEpoYbVoP1f5O">
+    <mxGraphModel dx="1426" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="entity_case" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;" value="管理案件 (Management Case)&#xa;【金流歸屬中心】" vertex="1">
+          <mxGeometry height="110" width="220" x="80" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="field_case_id" parent="entity_case" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="🔑 案件編號 (Key)" vertex="1">
+          <mxGeometry height="26" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="field_case_name" parent="entity_case" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="🏠 物件名稱 / 地址" vertex="1">
+          <mxGeometry height="26" width="220" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="field_case_link" parent="entity_case" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=2;fontColor=#666666;" value="🔗 關聯的所有金流 (列表)" vertex="1">
+          <mxGeometry height="26" width="220" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="entity_cashflow" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#000000;" value="金流紀錄 (Cash Flow)&#xa;【帳務明細表】" vertex="1">
+          <mxGeometry height="250" width="280" x="520" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="field_cf_id" parent="entity_cashflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="🔑 金流單號 (Key)" vertex="1">
+          <mxGeometry height="26" width="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="field_cf_link" parent="entity_cashflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=1;fontColor=#0000CC" value="🔗 歸屬案件 ID (必填)" vertex="1">
+          <mxGeometry height="26" width="280" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="field_cf_type" parent="entity_cashflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="📂 類型 (應收AR / 應付AP)" vertex="1">
+          <mxGeometry height="26" width="280" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="field_cf_mode" parent="entity_cashflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#fff2cc;fontColor=#B85450;" value="💸 金流處理模式 (Flow Mode)&#xa;[選項: 公司代收付 / 公司代墊 / 純紀錄]" vertex="1">
+          <mxGeometry height="40" width="280" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="field_cf_cat" parent="entity_cashflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=1;fontColor=#23445d" value="🏷️ 來源分類 (Category)&#xa;[例:租金/雜項調整/修繕代墊]" vertex="1">
+          <mxGeometry height="40" width="280" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="field_cf_date" parent="entity_cashflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="📅 發生日期" vertex="1">
+          <mxGeometry height="26" width="280" y="188" as="geometry" />
+        </mxCell>
+        <mxCell id="field_cf_status" parent="entity_cashflow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=2;fontColor=#666666;" value="⚡ 狀態 (未收付 / 已結案)" vertex="1">
+          <mxGeometry height="26" width="280" y="214" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_case_cf" edge="1" parent="1" source="entity_case" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeWidth=2;" target="entity_cashflow" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label_1_case" connectable="0" parent="rel_case_cf" style="resizable=0;html=1;whiteSpace=wrap;align=right;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.8" as="geometry">
+            <mxPoint x="10" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label_n_cf" connectable="0" parent="rel_case_cf" style="resizable=0;html=1;whiteSpace=wrap;align=left;verticalAlign=bottom;" value="N (多筆紀錄)" vertex="1">
+          <mxGeometry relative="1" x="0.8" as="geometry">
+            <mxPoint x="-10" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note_mode_expl" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fff2cc;strokeColor=#d6b656;size=15;align=left;spacingLeft=5;fontSize=11;fontStyle=1" value="💡 欄位定義：金流處理模式&#xa;1. [公司代收付]：錢實際進出公司帳戶 (標準流)&#xa;2. [公司代墊]：公司先付款，需從房東租金扣回&#xa;3. [純紀錄]：房客直匯房東/房東自繳 (不經公司手，但需紀錄)" vertex="1">
+          <mxGeometry height="80" width="280" x="850" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_mode" edge="1" parent="1" source="field_cf_mode" style="endArrow=none;dashed=1;html=1;strokeColor=#d6b656;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="note_mode_expl" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="note_cat_expl" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#dae8fc;strokeColor=#6c8ebf;size=15;align=left;spacingLeft=5;fontSize=11;" value="🔄 觀念釐清：雜項調整&#xa;「雜項支出」不僅是費用，更是結算調整項。&#xa;包含：修繕代墊扣款、違約金抵扣、管理費先扣。&#xa;系統視為 Cash Flow Category，而非單純 Expense。" vertex="1">
+          <mxGeometry height="80" width="280" x="850" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_cat" edge="1" parent="1" source="field_cf_cat" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="note_cat_expl" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="note_history_rule" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;size=15;align=left;spacingLeft=5;fontSize=11;fontStyle=1" value="⚠️ 系統原則：不可修改歷史&#xa;金流一旦建立，即為歷史事實。&#xa;若金額有誤，請「新增一筆負數」沖銷，或「新增補繳單」。&#xa;嚴禁直接修改舊有紀錄，以確保對帳軌跡。" vertex="1">
+          <mxGeometry height="70" width="280" x="520" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_hist" edge="1" parent="1" source="entity_cashflow" style="endArrow=none;dashed=1;html=1;strokeColor=#b85450;" target="note_history_rule" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
