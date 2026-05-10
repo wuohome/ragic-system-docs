@@ -606,30 +606,42 @@ flowchart TD
   <!-- ── Chart 7 ── -->
   <section class="chart-block" id="chart-7">
     <h2><span class="chart-num">圖 7</span>104 招募流</h2>
-    <p class="desc">n8n schedule 定時拉 104 履歷 → Claude 評分 → Ragic 回填 + 高分立即推 CC bot。</p>
+    <p class="desc">n8n schedule 已退役；改用 launchd cron 每 30 分跑 poll-applications.js（Puppeteer）→ 關鍵字偵測房地產同業 → 結構化事件直接回應 / freeText 走 HR Agent → 推 HR Telegram bot。</p>
     <div class="analogy">
-      招募自動化：n8n 定時去 104 撈新履歷（用 Playwright 模擬瀏覽器）→ AI 打分數（履歷符不符合條件、有什麼亮點）→ 寫進 Ragic 履歷分析表 → 分數高的立刻 Telegram 推給 Joan。Joan 在手機上就能直接看到候選人摘要。
+      招募自動化跑兩條並行的線：<strong>結構化事件</strong>（系統知道狀態變了，例如「同意面試」）→ poll-applications.js 直接照 business-rules.json 分流回應；<strong>freeText</strong>（候選人寫自由文字「我想改 5/15」）→ 呼叫 HR Agent 用 Claude 判意圖、自動回信 + 改 TimeTree。<strong>不寫 Ragic</strong>，候選人狀態存本機 seen-candidates.json + SQLite。通知都走獨立的 <strong>HR Telegram bot</strong>（不是平常 Joan 對話的小特助 CC）。
     </div>
     <div class="mermaid-wrap">
       <pre class="mermaid">
 sequenceDiagram
-    participant Cron as n8n schedule
-    participant Pup as Playwright<br/>poll-applications.js
-    participant TZ as 104 平台
-    participant CL as Claude 評分
-    participant RG as Ragic
-    participant CC as 小特助 CC bot
+    participant Cron as launchd cron<br/>(每30分)
+    participant Poll as poll-applications.js<br/>(Mac Mini)
+    participant TZ as 104 企業後台<br/>(Puppeteer)
+    participant Rules as business-rules.json
+    participant SI as seen-candidates.json<br/>+ SQLite
+    participant HR as lib/hr-agent.js<br/>(Claude Sonnet)
+    participant TT as TimeTree
+    participant TG as Telegram<br/>HR bot 8401828070
 
-    Cron->>Pup: 觸發 polling
-    Pup->>Pup: session-keeper.js<br/>維持登入
-    Pup->>TZ: 拉履歷列表
-    TZ-->>Pup: 應徵者 JSON
-    Pup-->>Cron: 履歷資料
-    Cron->>CL: 履歷 → 評分
-    CL-->>Cron: 評分 + 摘要
-    Cron->>RG: 寫履歷分析 sheet
-    Cron->>CC: 通知 (高分立即推 Joan)
-    Note over CC: Joan 在 Telegram<br/>看到候選人摘要
+    Cron->>Poll: 觸發
+    Poll->>TZ: 抓應徵資料 + 訊息
+    Poll->>Poll: seen-messages.json 去重
+
+    alt 結構化事件
+        Poll->>Rules: 查分流
+        Rules-->>Poll: direct_invite / notify_only
+        Poll->>Poll: 關鍵字偵測<br/>房地產同業
+        Poll->>TZ: 發詢問 / 直接邀約
+        Poll->>TT: 寫面試時段
+        Poll->>SI: 更新狀態
+        Poll->>TG: 推進度條
+    else freeText
+        Poll->>HR: 呼叫 hr-agent.js
+        HR->>HR: Claude 判 intent<br/>(改期/問地址/爽約)
+        HR->>TZ: 自動回覆
+        HR->>TT: 改期
+        HR->>SI: 寫決策 log
+        HR->>TG: 已自動處理
+    end
       </pre>
     </div>
   </section>
