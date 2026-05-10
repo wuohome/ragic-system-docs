@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>窩的家系統運作流程圖｜System Flows</title>
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Base ── */
+    body {
+      font-family: 'Inter', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      background: #FFFFFF;
+      color: #171717;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── TOC (left sticky sidebar) ── */
+    nav#toc {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 240px;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 32px 16px;
+      border-right: 1px solid #EAEAEA;
+      background: #FFFFFF;
+      z-index: 100;
+    }
+
+    nav#toc .toc-brand {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #8F8F8F;
+      margin-bottom: 4px;
+    }
+
+    nav#toc .toc-back {
+      display: block;
+      font-size: 0.82rem;
+      color: #8F8F8F;
+      text-decoration: none;
+      padding: 4px 0 16px;
+      border-bottom: 1px solid #EAEAEA;
+      margin-bottom: 16px;
+      transition: color 0.15s;
+    }
+
+    nav#toc .toc-back:hover { color: #171717; }
+
+    nav#toc h3 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #8F8F8F;
+      margin-bottom: 10px;
+    }
+
+    nav#toc ol {
+      list-style: none;
+      padding: 0;
+    }
+
+    nav#toc li {
+      margin-bottom: 2px;
+    }
+
+    nav#toc a {
+      display: block;
+      font-size: 0.83rem;
+      color: #666;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    nav#toc a:hover {
+      background: #FAFAFA;
+      color: #171717;
+    }
+
+    nav#toc a.active {
+      background: #F0F7FF;
+      color: #0070F3;
+      font-weight: 600;
+    }
+
+    /* ── Main content ── */
+    main {
+      margin-left: 240px;
+      padding: 64px 64px 96px;
+      max-width: 1080px;
+    }
+
+    /* ── Back link ── */
+    a.back-link {
+      display: inline-block;
+      font-size: 0.85rem;
+      color: #8F8F8F;
+      text-decoration: none;
+      margin-bottom: 32px;
+      transition: color 0.15s;
+    }
+
+    a.back-link:hover { color: #171717; }
+
+    /* ── Page header ── */
+    header.page-header {
+      margin-bottom: 64px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid #EAEAEA;
+    }
+
+    header.page-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #000000;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    header.page-header p.subtitle {
+      font-size: 1.05rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    header.page-header p.date {
+      font-size: 0.82rem;
+      color: #8F8F8F;
+    }
+
+    /* ── Intro card ── */
+    section.intro-card {
+      background: #FFFFFF;
+      border: 1px solid #EAEAEA;
+      border-radius: 12px;
+      padding: 32px 36px;
+      margin-bottom: 64px;
+    }
+
+    section.intro-card h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #171717;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+    }
+
+    section.intro-card p.lead {
+      font-size: 0.97rem;
+      color: #444;
+      margin-bottom: 8px;
+      line-height: 1.8;
+    }
+
+    section.intro-card h3 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #8F8F8F;
+      margin-top: 28px;
+      margin-bottom: 16px;
+    }
+
+    section.intro-card ul.glossary {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0;
+    }
+
+    section.intro-card ul.glossary li {
+      font-size: 0.88rem;
+      color: #171717;
+      padding: 10px 0;
+      border-bottom: 1px solid #EAEAEA;
+      display: flex;
+      gap: 10px;
+    }
+
+    section.intro-card ul.glossary li span.term {
+      font-weight: 600;
+      color: #171717;
+      white-space: nowrap;
+      min-width: 120px;
+    }
+
+    section.intro-card ul.glossary li span.def {
+      color: #666;
+    }
+
+    /* ── Section cards ── */
+    section.chart-block {
+      margin-bottom: 96px;
+      scroll-margin-top: 24px;
+    }
+
+    section.chart-block h2 {
+      font-size: 1.375rem;
+      font-weight: 700;
+      color: #000000;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    section.chart-block h2 .chart-num {
+      font-size: 0.72rem;
+      font-weight: 500;
+      font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
+      color: #666;
+      background: #FFFFFF;
+      border: 1px solid #EAEAEA;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    section.chart-block p.desc {
+      font-size: 0.93rem;
+      color: #666;
+      margin-bottom: 20px;
+      max-width: 760px;
+      line-height: 1.7;
+    }
+
+    /* ── Analogy callout ── */
+    .analogy {
+      background: #FFFFFF;
+      border-left: 3px solid #0070F3;
+      padding: 14px 20px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 20px;
+      font-size: 0.93rem;
+      color: #444;
+      line-height: 1.8;
+    }
+
+    .analogy::before {
+      content: "白話版";
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #8F8F8F;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    /* ── Mermaid wrapper ── */
+    .mermaid-wrap {
+      background: #FFFFFF;
+      border: 1px solid #EAEAEA;
+      border-radius: 12px;
+      padding: 32px;
+      overflow-x: auto;
+      transition: box-shadow 0.2s;
+    }
+
+    .mermaid-wrap:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    /* ── Footer ── */
+    footer.page-footer {
+      margin-left: 240px;
+      padding: 20px 64px;
+      border-top: 1px solid #EAEAEA;
+      font-size: 0.82rem;
+      color: #999;
+      background: #FFFFFF;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      nav#toc { display: none; }
+      main { margin-left: 0; padding: 32px 24px 72px; }
+      footer.page-footer { margin-left: 0; padding: 16px 24px; }
+      header.page-header h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ TOC ═══════════════════════════ -->
+<nav id="toc" aria-label="目錄">
+  <div class="toc-brand">窩的家系統文件</div>
+  <a class="toc-back" href="../index.html">← 回系統文件首頁</a>
+  <h3>本頁目錄</h3>
+  <ol>
+    <li><a href="#chart-1">圖 1 · 跨機系統總覽</a></li>
+    <li><a href="#chart-2">圖 2 · 訊息端到端流</a></li>
+    <li><a href="#chart-3">圖 3 · Bot 啟動鏈</a></li>
+    <li><a href="#chart-4">圖 4 · OAuth oat01 認證流</a></li>
+    <li><a href="#chart-5">圖 5 · 故障決策樹</a></li>
+    <li><a href="#chart-6">圖 6 · n8n LINE Collector</a></li>
+    <li><a href="#chart-7">圖 7 · 104 招募流</a></li>
+    <li><a href="#chart-8">圖 8 · Watchdog 4 層保險</a></li>
+  </ol>
+</nav>
+
+<!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+<main>
+
+  <a class="back-link" href="../index.html">← 回系統文件首頁</a>
+
+  <!-- Page header -->
+  <header class="page-header">
+    <h1>窩的家系統運作流程圖</h1>
+    <p class="subtitle">8 張圖看懂自動化系統怎麼工作</p>
+    <p class="date">更新日期：2026-05-09</p>
+  </header>
+
+  <!-- ── Intro / 怎麼看 ── -->
+  <section class="intro-card">
+    <h2>怎麼看這份文件？</h2>
+    <p class="lead">
+      這份是窩的家所有自動小幫手（Bot）的工作圖鑑。每張圖回答一個問題：誰在哪裡？訊息怎麼跑？小幫手出問題怎麼救？
+    </p>
+    <p class="lead">
+      8 張圖按「從大到小、從正常到故障」排序。沒空的話只看圖 1（全貌）+ 圖 5（壞了怎麼辦）就夠用。
+    </p>
+
+    <h3>難字白話對照表</h3>
+    <ul class="glossary">
+      <li><span class="term">Bot / 機器人</span><span class="def">24 小時值班的小幫手，像不會睡覺的便利商店店員</span></li>
+      <li><span class="term">API</span><span class="def">服務窗口（LINE 窗口、104 窗口、Anthropic 窗口）</span></li>
+      <li><span class="term">OAuth Token</span><span class="def">進門鑰匙，1 年到期要換</span></li>
+      <li><span class="term">Mac Mini Server</span><span class="def">24 小時開機那台「總機電腦」</span></li>
+      <li><span class="term">Windows 客戶端</span><span class="def">Joan 平常工作那台筆電</span></li>
+      <li><span class="term">Ragic</span><span class="def">公司線上資料庫，所有報表存這</span></li>
+      <li><span class="term">n8n</span><span class="def">自動化流水線，把不同工具串起來跑</span></li>
+      <li><span class="term">Vault</span><span class="def">Joan 的第二大腦筆記庫</span></li>
+      <li><span class="term">Webhook</span><span class="def">別人有事自動敲門通知我們</span></li>
+      <li><span class="term">launchd</span><span class="def">Mac 內建的「保母」，負責讓服務不死</span></li>
+      <li><span class="term">Anthropic API</span><span class="def">Claude AI 的「大腦」窗口</span></li>
+      <li><span class="term">Tailscale</span><span class="def">把不同機器接成同一個內網的工具</span></li>
+    </ul>
+  </section>
+
+  <!-- ── Chart 1 ── -->
+  <section class="chart-block" id="chart-1">
+    <h2><span class="chart-num">圖 1</span>跨機系統總覽</h2>
+    <p class="desc">Win 客戶端 / Mac server / 雲端三邊資料怎麼流，用戶從哪些介面進來。</p>
+    <div class="analogy">
+      想像窩的家有兩個房間：Joan 的辦公桌（Windows 筆電）和 24 小時值班室（Mac Mini）。員工、房客、外部廠商從手機（Telegram / LINE）進來，小幫手在值班室處理事情，再把結果寫進公司的線上檔案櫃（Ragic / GitHub）。
+    </div>
+    <div class="mermaid-wrap">
+      <pre class="mermaid">
+flowchart LR
+    subgraph U["使用者"]
+        Joan["Joan 老闆"]
+        Emp["窩的家員工"]
+        Tenant["房客 / 屋主"]
+        Vendor["外部廠商"]
+        Family["簡家家人"]
+    end
+
+    subgraph P["公開介面"]
+        TG["Telegram API"]
+        LINE["LINE API"]
+        Pages["GitHub Pages"]
+        Funnel["Tailscale Funnel"]
+        Ngrok["ngrok tunnel"]
+    end
+
+    subgraph W["Windows 客戶端"]
+        Vault[("Vault<br/>C:/Second Brain")]
+        CCC["Joan Claude Code"]
+    end
+
+    subgraph M["Mac Mini Server (24/7)"]
+        Bots["6 隻 Bot 集群<br/>:18800-18807"]
+        N8N["n8n :5678"]
+        Scripts["104 / 591 / Plaud<br/>本機腳本"]
+        Mem["Memory Engine"]
+    end
+
+    subgraph C["雲端"]
+        Anth["Anthropic API"]
+        Ragic[("Ragic ap5")]
+        GH["GitHub wuohome"]
+    end
+
+    Joan --> CCC
+    CCC -. SSH/scp .-> M
+    Vault <-. sync .-> M
+    Emp --> TG
+    Family --> TG
+    Tenant --> LINE
+    Vendor --> LINE
+    Tenant --> Pages
+
+    TG --> Bots
+    LINE --> Ngrok --> Bots
+    LINE --> Funnel --> N8N
+    Pages -. 讀寫 .-> Ragic
+
+    Bots --> Anth
+    N8N --> Ragic
+    Scripts --> Ragic
+    Pages --> GH
+      </pre>
+    </div>
+  </section>
+
+  <!-- ── Chart 2 ── -->
+  <section class="chart-block" id="chart-2">
+    <h2><span class="chart-num">圖 2</span>訊息端到端流</h2>
+    <p class="desc">Joan 在 Telegram 傳訊息 → claude 推論 → 回覆，總時延 ~700ms-8s。</p>
+    <div class="analogy">
+      Joan 在 Telegram 打字 → 小幫手收到 → 跑去問大腦（Claude AI）怎麼回 → 大腦想完答案 → 小幫手轉述給 Joan。整段不到 8 秒，跟 Google 一下差不多快。中間 Claude 還能「動手做事」（例如 SSH 進 Mac 跑 591 檢查腳本），不只是回字而已。
+    </div>
+    <div class="mermaid-wrap">
+      <pre class="mermaid">
+sequenceDiagram
+    actor Joan
+    participant TG as Telegram Cloud
+    participant SRV as server.mjs :18802
+    participant CLI as claude CLI
+    participant ANT as Anthropic API
+
+    Joan->>TG: 傳「幫我看 591 廣告」
+    Note over TG: 訊息暫存<br/>等 bot 拉走
+    SRV->>TG: getUpdates (long polling)
+    TG-->>SRV: {chat_id, text}
+    SRV->>CLI: MCP stdio 餵訊息
+    Note over CLI: 載 CLAUDE.md<br/>Opus 4.7 推論
+    CLI->>ANT: 推論請求 + OAuth
+    Note over ANT: 計入 Joan Max quota<br/>(5h 共用)
+    ANT-->>CLI: streaming response
+    Note over CLI: tool call 例:<br/>Bash ssh Mac<br/>跑 591 check.py
+    CLI->>SRV: MCP sendMessage()
+    SRV->>TG: bot API sendMessage
+    TG-->>Joan: 顯示回覆
+    Note over Joan,ANT: 總時延 ~700ms-8s
+      </pre>
+    </div>
+  </section>
+
+  <!-- ── Chart 3 ── -->
+  <section class="chart-block" id="chart-3">
+    <h2><span class="chart-num">圖 3</span>Bot 啟動鏈</h2>
+    <p class="desc">launchd → supervisor → tmux → run-session.sh → claude CLI → server.mjs，5 層保險誰負責什麼。</p>
+    <div class="analogy">
+      小幫手要「醒來上班」要走 5 個步驟，像俄羅斯娃娃一層包一層：最外面是 Mac 自帶的保母（launchd）→ 把它放進一個工作棚（tmux）→ 棚裡有個無限迴圈會把它叫起來（run-session.sh）→ 啟動 Claude → 開好接訊息的窗口。任何一層死掉，外面那層會把它叫醒。
+    </div>
+    <div class="mermaid-wrap">
+      <pre class="mermaid">
+flowchart TD
+    A["Mac 開機 或 手動 launchctl load"] --> B["launchd<br/>com.claude.bot.plist"]
+    B -->|RunAtLoad + KeepAlive| C["launchd-tmux-supervisor.sh"]
+    C --> D["tmux new-session -d<br/>-s claude-bot"]
+    D --> E["run-session.sh<br/>bash while 無限迴圈"]
+    E --> F["claude CLI<br/>--dangerously-load-development-channels<br/>server:channel"]
+    F --> G["讀 ~/.claude/CLAUDE.md<br/>+ repo CLAUDE.md<br/>+ .claude/settings.json"]
+    G --> H["spawn server.mjs<br/>(MCP stdio child)"]
+    H --> I["server.mjs 開 health port<br/>+ Telegram getUpdates 或 LINE webhook"]
+    I --> J["Bot 上線 等訊息"]
+
+    J -. claude exit .-> E
+    J -. bash 死 .-> B
+
+    style J fill:#0070F3,color:#fff
+    style E fill:#FFFBEB,color:#000
+    style B fill:#F0F7FF,color:#000
+      </pre>
+    </div>
+  </section>
+
+  <!-- ── Chart 4 ── -->
+  <section class="chart-block" id="chart-4">
+    <h2><span class="chart-num">圖 4</span>OAuth oat01 認證流</h2>
+    <p class="desc">Joan 一次 setup-token，注入 5 隻 bot .env，1 年期，2027-04-28 前換。</p>
+    <div class="analogy">
+      Joan 每年產一把大門鑰匙（OAuth Token），複製給 5 隻小幫手共用，這樣它們才能跟 Claude AI 對話且計算進 Joan 的訂閱額度（不另外刷信用卡）。鑰匙有效 1 年，下次要換是 2027-04-28。系統有個 oauth_check 每天偷看一次，到期前 14 天就會推 Joan。
+    </div>
+    <div class="mermaid-wrap">
+      <pre class="mermaid">
+flowchart LR
+    A["Joan<br/>Windows"] -->|一次手動| B["claude setup-token"]
+    B --> C["sk-ant-oat01-...<br/>有效 1 年"]
+    C --> D["scp 注入 5 隻 .env"]
+    D --> E1["claude-telegram-channel/.env"]
+    D --> E2["claude-telegram-doctor/.env"]
+    D --> E3["claude-telegram-secretary/.env"]
+    D --> E4["claude-telegram-wealth/.env"]
+    D --> E5["claude-line-purchase/.env<br/>必先 delete<br/>ANTHROPIC_API_KEY"]
+
+    E1 --> F["claude CLI 讀 env<br/>走訂閱模式"]
+    E2 --> F
+    E3 --> F
+    E4 --> F
+    E5 --> G["claude-agent-sdk<br/>subprocess query()"]
+
+    F --> H["Anthropic API<br/>認 OAuth bearer<br/>計 Max quota"]
+    G --> H
+
+    I["oauth_check.py 每日"] -. 讀 env .-> E1
+    I -->|過期 14d 內| A
+
+    style C fill:#FFFBEB
+    style H fill:#ECFDF5
+      </pre>
+    </div>
+  </section>
+
+  <!-- ── Chart 5 ── -->
+  <section class="chart-block" id="chart-5">
+    <h2><span class="chart-num">圖 5</span>故障決策樹</h2>
+    <p class="desc">Bot 出問題 → 1 隻 vs 全部 → 對應症狀 → SOP。</p>
+    <div class="analogy">
+      小幫手生病的分診流程。第一個問題：一隻不舒服 vs 全部不舒服？<br/>
+      全部 → 通常是大門鑰匙過期，重產一次再分發。<br/>
+      一隻 → 看症狀對應 SOP（401 鑰匙沒更新 / 429 跑錯版本 / 沒反應 = 假活 / 訊息卡 / 答錯 = session 過期）。<br/>
+      最神秘那種「我也不知道怎麼了」，丟給 Doctor 自動修。
+    </div>
+    <div class="mermaid-wrap">
+      <pre class="mermaid">
+flowchart TD
+    Start["Bot 出問題"] --> Q1{"幾隻掛?"}
+    Q1 -->|"1 隻"| Q2{"症狀?"}
+    Q1 -->|"全部"| F1["OAuth 過期<br/>或 token revoke"]
+
+    F1 --> S1["1. Win 重跑 claude setup-token<br/>2. 更新 5 隻 .env<br/>3. 依序重啟 bot"]
+
+    Q2 -->|"401"| F2["該 bot .env<br/>token 沒更新"]
+    Q2 -->|"429"| F3["LINE 採購<br/>跑錯 server-api.mjs?"]
+    Q2 -->|"沒反應<br/>health port 沒 LISTEN"| F4["假活<br/>server.mjs 死"]
+    Q2 -->|"訊息卡住<br/>pending > 0"| F5["Telegram 佇列卡"]
+    Q2 -->|"答錯/吃舊規則"| F6["session 過期"]
+    Q2 -->|"完全不知道"| F7["Doctor /inject"]
+
+    F2 --> S2["scp 補 .env<br/>+ launchctl kickstart"]
+    F3 --> S3["切到 server-agent.mjs<br/>+ settingSources:[]"]
+    F4 --> S4["check_health_port<br/>60s streak 自動殺 claude"]
+    F5 --> S5["launchctl unload+load<br/>+ pkill"]
+    F6 --> S6["在 Telegram 傳 /new<br/>SIGTERM ppid 重讀"]
+    F7 --> S7["Doctor Opus xhigh<br/>讀錯誤+vault 自動修"]
+
+    style Start fill:#FEF2F2
+    style F1 fill:#FFFBEB
+    style S1 fill:#ECFDF5
+    style S2 fill:#ECFDF5
+    style S3 fill:#ECFDF5
+    style S4 fill:#ECFDF5
+    style S5 fill:#ECFDF5
+    style S6 fill:#ECFDF5
+    style S7 fill:#ECFDF5
+      </pre>
+    </div>
+  </section>
+
+  <!-- ── Chart 6 ── -->
+  <section class="chart-block" id="chart-6">
+    <h2><span class="chart-num">圖 6</span>n8n LINE Collector 分支</h2>
+    <p class="desc">LINE webhook 進來後，按 keyword 分支去哪個系統處理。</p>
+    <div class="analogy">
+      LINE 訊息進來時的分類郵差。看訊息開頭關鍵字：<br/>
+      /廣告刊登、/廣告到期、/誰沒補、/精選置頂 → 591 廣告管家處理<br/>
+      /點名 → 每日行程點名，寫進 Ragic<br/>
+      沒關鍵字 → 只記錄到資料庫，每小時整理一次推 Joan<br/>
+      （採購是另一條獨立 OA，不走這條 webhook）
+    </div>
+    <div class="mermaid-wrap">
+      <pre class="mermaid">
+flowchart TD
+    A["LINE OA push<br/>/webhook/line-webhook"] --> B["n8n LINE Collector<br/>GlJlOzMj9rhYUlFO"]
+    B --> C["拆 message events"]
+    C --> D{"keyword?"}
+
+    D -->|"/廣告刊登 /廣告到期<br/>/誰沒補 /精選置頂"| E1["591 廣告管家"]
+    D -->|"點名"| E2["每日行程點名<br/>Reply Message"]
+    D -->|"無 keyword"| E3["寫 line_messages 表"]
+    D -.採購由獨立 OA.- E4["LINE 採購 Bot :18801<br/>非 webhook"]
+
+    E1 --> F1["回 LINE 群組"]
+    E2 --> F2["填 ragicforms4/20004<br/>+ property-data-kept/9"]
+    E3 --> G["每小時 SEC workflow<br/>EVTExdTA54AsDweL"]
+    G --> H["秘書 SEC bot 整理"]
+    H --> I["Telegram 推 Joan"]
+    E4 --> F4["claude-agent-sdk<br/>建 Ragic 採購單"]
+
+    style A fill:#F0F7FF
+    style I fill:#FDF2F8
+    style F1 fill:#ECFDF5
+    style F2 fill:#ECFDF5
+    style F4 fill:#ECFDF5
+      </pre>
+    </div>
+  </section>
+
+  <!-- ── Chart 7 ── -->
+  <section class="chart-block" id="chart-7">
+    <h2><span class="chart-num">圖 7</span>104 招募流</h2>
+    <p class="desc">n8n schedule 定時拉 104 履歷 → Claude 評分 → Ragic 回填 + 高分立即推 CC bot。</p>
+    <div class="analogy">
+      招募自動化：n8n 定時去 104 撈新履歷（用 Playwright 模擬瀏覽器）→ AI 打分數（履歷符不符合條件、有什麼亮點）→ 寫進 Ragic 履歷分析表 → 分數高的立刻 Telegram 推給 Joan。Joan 在手機上就能直接看到候選人摘要。
+    </div>
+    <div class="mermaid-wrap">
+      <pre class="mermaid">
+sequenceDiagram
+    participant Cron as n8n schedule
+    participant Pup as Playwright<br/>poll-applications.js
+    participant TZ as 104 平台
+    participant CL as Claude 評分
+    participant RG as Ragic
+    participant CC as 小特助 CC bot
+
+    Cron->>Pup: 觸發 polling
+    Pup->>Pup: session-keeper.js<br/>維持登入
+    Pup->>TZ: 拉履歷列表
+    TZ-->>Pup: 應徵者 JSON
+    Pup-->>Cron: 履歷資料
+    Cron->>CL: 履歷 → 評分
+    CL-->>Cron: 評分 + 摘要
+    Cron->>RG: 寫履歷分析 sheet
+    Cron->>CC: 通知 (高分立即推 Joan)
+    Note over CC: Joan 在 Telegram<br/>看到候選人摘要
+      </pre>
+    </div>
+  </section>
+
+  <!-- ── Chart 8 ── -->
+  <section class="chart-block" id="chart-8">
+    <h2><span class="chart-num">圖 8</span>Watchdog 4 層保險</h2>
+    <p class="desc">Bot 死掉時 4 層接力救活，反應時間從 &lt;1s 到人工。</p>
+    <div class="analogy">
+      小幫手死掉時的四層保險，越外層反應越慢但越牢靠：<br/>
+      L1 自己重啟（不到 1 秒）— 程式自己有迴圈，掛了重來<br/>
+      L2 系統托管（約 20 秒）— Mac 內建保母 launchd 把整個程式叫醒<br/>
+      L3 監控推 Joan（10–15 分鐘）— 連兩次 ping 不到就 Telegram 通報<br/>
+      L4 Joan 親自上場 — SSH 進去看，或重產鑰匙
+    </div>
+    <div class="mermaid-wrap">
+      <pre class="mermaid">
+flowchart LR
+    subgraph L1["L1 run-session.sh"]
+        L1A["bash while 無限迴圈<br/>claude exit → respawn<br/>401 → pkill+重啟<br/>health port 60s streak"]
+    end
+    subgraph L2["L2 launchd KeepAlive"]
+        L2A["launchctl 托管<br/>bash 死 → 20s 復活<br/>透過 supervisor wrapper"]
+    end
+    subgraph L3["L3 bot-cluster-monitor"]
+        L3A["每 5 min<br/>直 curl Telegram API<br/>連 2 次失敗才推<br/>cooldown 6h"]
+    end
+    subgraph L4["L4 人工"]
+        L4A["Joan 收推<br/>SSH 進 Mac<br/>或 setup-token"]
+    end
+
+    L1 --> L2
+    L2 --> L3
+    L3 --> L4
+
+    R1["反應 &lt; 1s"] -.-> L1
+    R2["反應 ~20s"] -.-> L2
+    R3["反應 10-15min"] -.-> L3
+    R4["反應 人工"] -.-> L4
+
+    style L1 fill:#ECFDF5
+    style L2 fill:#FFFBEB
+    style L3 fill:#FFF7ED
+    style L4 fill:#FEF2F2
+      </pre>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer class="page-footer">
+  窩的家系統文件 · 製作於 2026-05-09 · 配合 [00-06].canvas 架構圖使用
+</footer>
+
+<!-- ═══════════════════════════ MERMAID ESM ═══════════════════════════ -->
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    securityLevel: 'loose',
+    fontFamily: "'Inter', 'Noto Sans TC', 'PingFang TC', sans-serif",
+    themeVariables: {
+      fontFamily: "'Inter', 'Noto Sans TC', sans-serif",
+      fontSize: '14px',
+      primaryColor: '#FAFAFA',
+      primaryTextColor: '#171717',
+      primaryBorderColor: '#EAEAEA',
+      lineColor: '#8F8F8F',
+      secondaryColor: '#FFFFFF',
+      tertiaryColor: '#FAFAFA',
+      background: '#FFFFFF',
+      mainBkg: '#FFFFFF',
+      secondBkg: '#FAFAFA',
+      tertiaryBkg: '#F5F5F5',
+      nodeBorder: '#EAEAEA',
+      clusterBkg: '#FAFAFA',
+      clusterBorder: '#EAEAEA',
+      titleColor: '#171717',
+      edgeLabelBackground: '#FFFFFF',
+      actorBkg: '#FAFAFA',
+      actorBorder: '#EAEAEA',
+      actorTextColor: '#171717',
+      actorLineColor: '#8F8F8F',
+      signalColor: '#171717',
+      signalTextColor: '#171717',
+      labelBoxBkgColor: '#FAFAFA',
+      labelBoxBorderColor: '#EAEAEA',
+      labelTextColor: '#171717',
+      noteBkgColor: '#F0F7FF',
+      noteTextColor: '#171717',
+      noteBorderColor: '#0070F3'
+    },
+    flowchart: { curve: 'basis', padding: 24, useMaxWidth: true },
+    sequence: { actorMargin: 60, messageMargin: 35, useMaxWidth: true }
+  });
+
+  // ── Active TOC highlight on scroll ──
+  const sections = document.querySelectorAll('section.chart-block');
+  const navLinks = document.querySelectorAll('nav#toc a');
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          navLinks.forEach((a) => a.classList.remove('active'));
+          const id = entry.target.id;
+          const active = document.querySelector(`nav#toc a[href="#${id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    },
+    { rootMargin: '-20% 0px -70% 0px' }
+  );
+
+  sections.forEach((s) => observer.observe(s));
+</script>
+
+</body>
+</html>
