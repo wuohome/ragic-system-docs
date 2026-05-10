@@ -383,7 +383,7 @@ flowchart LR
     end
 
     subgraph M["Mac Mini Server (24/7)"]
-        Bots["6 隻 Bot 集群<br/>:18800-18807"]
+        Bots["Bot 集群<br/>5 活躍 + plaud-api<br/>:18800-18807"]
         N8N["n8n :5678"]
         Scripts["104 / 591 / Plaud<br/>本機腳本"]
         Mem["Memory Engine"]
@@ -391,7 +391,7 @@ flowchart LR
 
     subgraph C["雲端"]
         Anth["Anthropic API"]
-        Ragic[("Ragic ap5")]
+        Ragic[("Ragic ap15")]
         GH["GitHub wuohome"]
     end
 
@@ -405,8 +405,8 @@ flowchart LR
     Tenant --> Pages
 
     TG --> Bots
-    LINE --> Ngrok --> Bots
     LINE --> Funnel --> N8N
+    LINE -. 採購 OA .-> Ngrok --> Bots
     Pages -. 讀寫 .-> Ragic
 
     Bots --> Anth
@@ -454,9 +454,9 @@ sequenceDiagram
   <!-- ── Chart 3 ── -->
   <section class="chart-block" id="chart-3">
     <h2><span class="chart-num">圖 3</span>Bot 啟動鏈</h2>
-    <p class="desc">launchd → supervisor → tmux → run-session.sh → claude CLI → server.mjs，5 層保險誰負責什麼。</p>
+    <p class="desc">launchd → supervisor → tmux → run-session.sh → claude CLI → server.mjs，6 層保險誰負責什麼。</p>
     <div class="analogy">
-      小幫手要「醒來上班」要走 5 個步驟，像俄羅斯娃娃一層包一層：最外面是 Mac 自帶的保母（launchd）→ 把它放進一個工作棚（tmux）→ 棚裡有個無限迴圈會把它叫起來（run-session.sh）→ 啟動 Claude → 開好接訊息的窗口。任何一層死掉，外面那層會把它叫醒。
+      小幫手要「醒來上班」要走 6 個步驟，像俄羅斯娃娃一層包一層：最外面是 Mac 自帶的保母（launchd）→ 把它放進一個工作棚（tmux）→ 棚裡有個無限迴圈會把它叫起來（run-session.sh）→ 啟動 Claude → 開好接訊息的窗口。任何一層死掉，外面那層會把它叫醒。
     </div>
     <div class="mermaid-wrap">
       <pre class="mermaid">
@@ -484,9 +484,9 @@ flowchart TD
   <!-- ── Chart 4 ── -->
   <section class="chart-block" id="chart-4">
     <h2><span class="chart-num">圖 4</span>OAuth oat01 認證流</h2>
-    <p class="desc">Joan 一次 setup-token，注入 5 隻 bot .env，1 年期，2027-04-28 前換。</p>
+    <p class="desc">Joan 一次 setup-token，注入 4 隻 Telegram bot .env，1 年期，2027-04-28 前換。LINE 採購已獨立直連 API Key。</p>
     <div class="analogy">
-      Joan 每年產一把大門鑰匙（OAuth Token），複製給 5 隻小幫手共用，這樣它們才能跟 Claude AI 對話且計算進 Joan 的訂閱額度（不另外刷信用卡）。鑰匙有效 1 年，下次要換是 2027-04-28。系統有個 oauth_check 每天偷看一次，到期前 14 天就會推 Joan。
+      Joan 每年產一把大門鑰匙（OAuth Token），複製給 4 隻 Telegram 小幫手共用，這樣它們才能跟 Claude AI 對話且計算進 Joan 的訂閱額度（不另外刷信用卡）。鑰匙有效 1 年，下次要換是 2027-04-28。系統有個 oauth_check 每天偷看一次，到期前 14 天就會推 Joan。
     </div>
     <div class="mermaid-wrap">
       <pre class="mermaid">
@@ -498,16 +498,16 @@ flowchart LR
     D --> E2["claude-telegram-doctor/.env"]
     D --> E3["claude-telegram-secretary/.env"]
     D --> E4["claude-telegram-wealth/.env"]
-    D --> E5["claude-line-purchase/.env<br/>必先 delete<br/>ANTHROPIC_API_KEY"]
+    D --> E5["claude-line-purchase<br/>已脫離 OAuth 流<br/>(2026-04-27 起直連 API Key)"]
 
     E1 --> F["claude CLI 讀 env<br/>走訂閱模式"]
     E2 --> F
     E3 --> F
     E4 --> F
-    E5 --> G["claude-agent-sdk<br/>subprocess query()"]
+    E5 --> G2["獨立 ANTHROPIC_API_KEY<br/>claude-sonnet-4-6 直連"]
 
     F --> H["Anthropic API<br/>認 OAuth bearer<br/>計 Max quota"]
-    G --> H
+    G2 --> H2["Anthropic API<br/>認 x-api-key<br/>不計 Max quota"]
 
     I["oauth_check.py 每日"] -. 讀 env .-> E1
     I -->|過期 14d 內| A
@@ -538,14 +538,14 @@ flowchart TD
     F1 --> S1["1. Win 重跑 claude setup-token<br/>2. 更新 5 隻 .env<br/>3. 依序重啟 bot"]
 
     Q2 -->|"401"| F2["該 bot .env<br/>token 沒更新"]
-    Q2 -->|"429"| F3["LINE 採購<br/>跑錯 server-api.mjs?"]
+    Q2 -->|"429"| F3["LINE 採購 rate limit<br/>(直連 API)"]
     Q2 -->|"沒反應<br/>health port 沒 LISTEN"| F4["假活<br/>server.mjs 死"]
     Q2 -->|"訊息卡住<br/>pending > 0"| F5["Telegram 佇列卡"]
     Q2 -->|"答錯/吃舊規則"| F6["session 過期"]
     Q2 -->|"完全不知道"| F7["Doctor /inject"]
 
     F2 --> S2["scp 補 .env<br/>+ launchctl kickstart"]
-    F3 --> S3["切到 server-agent.mjs<br/>+ settingSources:[]"]
+    F3 --> S3["等候退避重試<br/>或檢查 API Key 用量"]
     F4 --> S4["check_health_port<br/>60s streak 自動殺 claude"]
     F5 --> S5["launchctl unload+load<br/>+ pkill"]
     F6 --> S6["在 Telegram 傳 /new<br/>SIGTERM ppid 重讀"]
